@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Horloge Mondiale</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 40px 20px 20px;
+    }
+
+    h1 {
+      color: #fff;
+      font-size: 2rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 40px;
+      text-align: center;
+      text-shadow: 0 0 20px rgba(100, 149, 237, 0.8);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 24px;
+      width: 100%;
+      max-width: 1100px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 16px;
+      padding: 24px 20px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+    }
+
+    .flag {
+      font-size: 2.8rem;
+      margin-bottom: 10px;
+    }
+
+    .city {
+      color: #a0b4d6;
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .country {
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .time {
+      color: #64b5f6;
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .date {
+      color: #90a4ae;
+      font-size: 0.8rem;
+      margin-top: 6px;
+    }
+
+    footer {
+      margin-top: 50px;
+      color: rgba(255,255,255,0.35);
+      font-size: 0.8rem;
+      letter-spacing: 1.5px;
+      text-align: center;
+    }
+
+    footer span {
+      color: rgba(100, 181, 246, 0.6);
+    }
+  </style>
+</head>
+<body>
+
+  <div>
+    <h1>🌍 Horloge Mondiale</h1>
+    <div class="grid" id="grid"></div>
+  </div>
+
+  <footer>co développé par <span>Ali</span> &amp; <span>Claude</span></footer>
+
+  <script>
+    const cities = [
+      { flag: "🇫🇷", city: "Paris",        country: "France",        tz: "Europe/Paris" },
+      { flag: "🇬🇧", city: "Londres",      country: "Royaume-Uni",   tz: "Europe/London" },
+      { flag: "🇺🇸", city: "New York",     country: "États-Unis",    tz: "America/New_York" },
+      { flag: "🇺🇸", city: "Los Angeles",  country: "États-Unis",    tz: "America/Los_Angeles" },
+      { flag: "🇧🇷", city: "São Paulo",    country: "Brésil",        tz: "America/Sao_Paulo" },
+      { flag: "🇦🇪", city: "Dubaï",        country: "Émirats Arabes", tz: "Asia/Dubai" },
+      { flag: "🇮🇳", city: "Mumbai",       country: "Inde",          tz: "Asia/Kolkata" },
+      { flag: "🇨🇳", city: "Pékin",        country: "Chine",         tz: "Asia/Shanghai" },
+      { flag: "🇯🇵", city: "Tokyo",        country: "Japon",         tz: "Asia/Tokyo" },
+      { flag: "🇦🇺", city: "Sydney",       country: "Australie",     tz: "Australia/Sydney" },
+      { flag: "🇷🇺", city: "Moscou",       country: "Russie",        tz: "Europe/Moscow" },
+      { flag: "🇲🇦", city: "Casablanca",   country: "Maroc",         tz: "Africa/Casablanca" },
+    ];
+
+    const grid = document.getElementById("grid");
+
+    cities.forEach(({ flag, city, country, tz }) => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <div class="flag">${flag}</div>
+        <div class="city">${city}</div>
+        <div class="country">${country}</div>
+        <div class="time" id="time-${tz.replace(/\//g,'-')}">--:--:--</div>
+        <div class="date" id="date-${tz.replace(/\//g,'-')}">---</div>
+      `;
+      grid.appendChild(card);
+    });
+
+    function update() {
+      const now = new Date();
+      cities.forEach(({ tz }) => {
+        const id = tz.replace(/\//g, '-');
+        const timeEl = document.getElementById(`time-${id}`);
+        const dateEl = document.getElementById(`date-${id}`);
+
+        const timeStr = now.toLocaleTimeString('fr-FR', { timeZone: tz, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        const dateStr = now.toLocaleDateString('fr-FR', { timeZone: tz, weekday: 'long', day: 'numeric', month: 'long' });
+
+        timeEl.textContent = timeStr;
+        dateEl.textContent = dateStr;
+      });
+    }
+
+    update();
+    setInterval(update, 1000);
+  </script>
+</body>
+</html>
