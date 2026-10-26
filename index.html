@@ -2,93 +2,118 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
   <title>Horloge Mondiale</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       min-height: 100vh;
+      min-height: 100dvh;
       background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-      font-family: 'Segoe UI', sans-serif;
+      font-family: -apple-system, 'Segoe UI', sans-serif;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
-      padding: 40px 20px 20px;
+      padding: calc(40px + env(safe-area-inset-top)) 20px calc(20px + env(safe-area-inset-bottom));
+      padding-left: calc(16px + env(safe-area-inset-left));
+      padding-right: calc(16px + env(safe-area-inset-right));
     }
 
     h1 {
       color: #fff;
-      font-size: 2rem;
+      font-size: clamp(1.2rem, 5vw, 2rem);
       letter-spacing: 3px;
       text-transform: uppercase;
-      margin-bottom: 40px;
+      margin-bottom: 28px;
       text-align: center;
       text-shadow: 0 0 20px rgba(100, 149, 237, 0.8);
     }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 24px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
       width: 100%;
       max-width: 1100px;
+    }
+
+    /* Tablette : 3 colonnes */
+    @media (min-width: 600px) {
+      .grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    }
+
+    /* Desktop : 4 colonnes */
+    @media (min-width: 900px) {
+      .grid { grid-template-columns: repeat(4, 1fr); gap: 24px; }
     }
 
     .card {
       background: rgba(255, 255, 255, 0.07);
       border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 16px;
-      padding: 24px 20px;
+      padding: 18px 12px;
       text-align: center;
       backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       transition: transform 0.2s, box-shadow 0.2s;
+      /* Empêche le tap highlight bleu sur iOS */
+      -webkit-tap-highlight-color: transparent;
     }
 
-    .card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+    @media (hover: hover) {
+      .card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+      }
+    }
+
+    .card:active {
+      transform: scale(0.97);
     }
 
     .flag {
-      font-size: 2.8rem;
-      margin-bottom: 10px;
+      font-size: clamp(1.8rem, 6vw, 2.8rem);
+      margin-bottom: 8px;
+      line-height: 1;
     }
 
     .city {
       color: #a0b4d6;
-      font-size: 0.85rem;
-      letter-spacing: 2px;
+      font-size: clamp(0.6rem, 2.5vw, 0.85rem);
+      letter-spacing: 1.5px;
       text-transform: uppercase;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
     }
 
     .country {
       color: #fff;
-      font-size: 1.1rem;
+      font-size: clamp(0.8rem, 3vw, 1.1rem);
       font-weight: 600;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
     }
 
     .time {
       color: #64b5f6;
-      font-size: 2.2rem;
+      font-size: clamp(1.4rem, 5.5vw, 2.2rem);
       font-weight: 700;
-      letter-spacing: 2px;
+      letter-spacing: 1px;
       font-variant-numeric: tabular-nums;
     }
 
     .date {
       color: #90a4ae;
-      font-size: 0.8rem;
-      margin-top: 6px;
+      font-size: clamp(0.6rem, 2.2vw, 0.8rem);
+      margin-top: 5px;
     }
 
     footer {
-      margin-top: 50px;
+      margin-top: 36px;
       color: rgba(255,255,255,0.35);
-      font-size: 0.8rem;
+      font-size: clamp(0.7rem, 2.5vw, 0.8rem);
       letter-spacing: 1.5px;
       text-align: center;
     }
